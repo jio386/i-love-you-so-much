@@ -1,44 +1,39 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    // 1. Anniversary Date/Time Setup
-    // September is month 8 (0-indexed: Jan=0, Feb=1, ... Sep=8)
-    const anniversaryDate = new Date("September 28, 2023 22:46:00").getTime();
+    // 1. Target Date/Time Setup (The EXACT two-year anniversary moment: Sep 28, 2025 at 10:46 PM)
+    const targetDate = new Date("September 28, 2025 22:46:00").getTime();
     
     const second = 1000;
     const minute = second * 60;
     const hour = minute * 60;
-    const day = hour * 24;
-    const year = day * 365.25; // Use 365.25 for average days in a year
-
-    // 2. Counter Logic
+    
+    // 2. Countdown Logic
     function updateCounter() {
         const now = new Date().getTime();
-        const distance = now - anniversaryDate;
+        const distance = targetDate - now; 
 
+        // Stop the countdown once the time has passed
         if (distance < 0) {
-            // Should only happen if the date is in the future
-            document.getElementById("years").innerText = "0";
+            document.getElementById("years").innerText = "2"; 
             document.getElementById("days").innerText = "0";
             document.getElementById("hours").innerText = "0";
             document.getElementById("minutes").innerText = "0";
+            document.querySelector('.title').innerText = "Happy 2 Year Anniversary!";
             return;
         }
 
-        // Calculate time parts
-        const years = Math.floor(distance / year);
-        const days = Math.floor((distance % year) / day);
-        const hours = Math.floor((distance % day) / hour);
+        // Calculate time parts (Total hours remaining)
+        const totalHours = Math.floor(distance / hour);
         const minutes = Math.floor((distance % hour) / minute);
-
-        // Display results
-        document.getElementById("years").innerText = years;
-        document.getElementById("days").innerText = days;
-        document.getElementById("hours").innerText = hours;
+        
+        // Display the results (locking Years and Days, counting Hours and Minutes)
+        document.getElementById("years").innerText = "2"; 
+        document.getElementById("days").innerText = "0"; 
+        document.getElementById("hours").innerText = totalHours;
         document.getElementById("minutes").innerText = minutes;
     }
 
-    // Update the counter every minute
-    setInterval(updateCounter, minute); 
-    // Run once immediately to avoid a delay
+    // Update the counter every second
+    setInterval(updateCounter, 1000); 
     updateCounter(); 
 
     // 3. Modal (Pop-up Message) Logic
@@ -46,17 +41,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const btn = document.getElementById("gift-button");
     const span = document.getElementsByClassName("close-button")[0];
 
-    // When the user clicks the button, open the modal 
     btn.onclick = function() {
         modal.style.display = "block";
     }
 
-    // When the user clicks on <span> (x), close the modal
     span.onclick = function() {
         modal.style.display = "none";
     }
 
-    // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
